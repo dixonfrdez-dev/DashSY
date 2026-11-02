@@ -6,19 +6,19 @@ export async function pasteSpecial() {
         const text = await navigator.clipboard.readText();
         const refMatch = text.match(/(?:\d{1,2}\/\d{1,2}\/\d{2,4}\s*-\s*|Ref(?:erencia)?[:\s-]+|-\s*)([a-z0-9]{8,})/i);
         const usuarioMatch = text.match(/Contraparte:\s*([A-Z0-9\.]+)/i);
-        const tasaMatch = text.match(/Precio:\s*([\d\.]+)/i);
+        const tasaMatch = text.match(/Precio:\s*([\d.,]+)/i);
         const estatusMatch = text.match(/Transacción\s+completada/i);
         const montoRecibidoUsdcMatch = text.match(/Monto recibido:\s*([\d\.,]+)\s*USDC/i);
         const montoEnviadoUsdcMatch = text.match(/Monto enviado:\s*([\d\.,]+)\s*USDC/i);
         if (usuarioMatch) document.getElementById("usuario").value = usuarioMatch[1];
         if (refMatch) document.getElementById("referencia").value = refMatch[1];
-        if (tasaMatch) document.getElementById("tasa").value = tasaMatch[1].replace(',', '.');
+        if (tasaMatch) document.getElementById("tasa").value = tasaMatch[1];
         if (montoRecibidoUsdcMatch) {
             document.getElementById("operacion").value = "Compra";
-            document.getElementById("montoUsdc").value = montoRecibidoUsdcMatch[1].replace(',', '.');
+            document.getElementById("montoUsdc").value = montoRecibidoUsdcMatch[1];
         } else if (montoEnviadoUsdcMatch) {
             document.getElementById("operacion").value = "Venta";
-            document.getElementById("montoUsdc").value = montoEnviadoUsdcMatch[1].replace(',', '.');
+            document.getElementById("montoUsdc").value = montoEnviadoUsdcMatch[1];
         } else { showToast("No se pudo determinar el tipo de operación (Compra/Venta) o el monto USDC.", "warning"); return; }
         if (estatusMatch) document.getElementById("estatus").value = "Completado";
         window.calculateAll();
