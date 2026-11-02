@@ -1,4 +1,5 @@
 import { state, defaultProfitGoals, defaultDashboardGoals } from './state.js';
+import { parseLocalizedNumber } from './number-parser.mjs';
 
 export function clearForm() {
     const form = document.getElementById('operationModal');
@@ -16,8 +17,8 @@ export function clearForm() {
 }
 
 export function calculateAll() {
-    const tasa = parseFloat(document.getElementById('tasa').value) || 0;
-    const montoUsdcOriginal = parseFloat(document.getElementById('montoUsdc').value) || 0;
+    const tasa = parseLocalizedNumber(document.getElementById('tasa').value) ?? 0;
+    const montoUsdcOriginal = parseLocalizedNumber(document.getElementById('montoUsdc').value) ?? 0;
     const operacion = document.getElementById('operacion').value;
     const metodoPago = document.getElementById('metodoPago').value;
     const platformSelect = document.getElementById('p2pPlatformSelect');

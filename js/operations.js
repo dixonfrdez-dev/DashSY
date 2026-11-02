@@ -2,6 +2,7 @@ import { state, db } from './state.js';
 import { showToast, openModal, closeModal, openConfirmModal, openConfirmMoveModal } from './ui.js';
 const emptyStateIcon = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-12 h-12 mx-auto mb-3 text-gray-500"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" /></svg>';
 import { getRatingIndicator, checkInitialLoadComplete, sanitizeHTML } from './utils.js';
+import { parseLocalizedNumber } from './number-parser.mjs';
 import { queueOperation, registerSync } from './bg-sync.js';
 
 let _opsUnsubscribe = null;
@@ -31,9 +32,9 @@ export function saveOperation() {
     if (!state.currentUserId) return;
     const usuario = document.getElementById('usuario').value.trim();
     const referencia = document.getElementById('referencia').value.trim();
-    const tasa = parseFloat(document.getElementById('tasa').value) || 0;
-    const grossUsdc = parseFloat(document.getElementById('montoUsdc').value) || 0;
-    if (!usuario || !tasa || !grossUsdc) {
+    const tasa = parseLocalizedNumber(document.getElementById('tasa').value);
+    const grossUsdc = parseLocalizedNumber(document.getElementById('montoUsdc').value);
+    if (!usuario || tasa === null || grossUsdc === null || tasa <= 0 || grossUsdc <= 0) {
         showToast('Por favor, complete todos los campos obligatorios.', 'error');
         return;
     }
